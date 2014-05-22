@@ -24,12 +24,11 @@
         <![endif]-->
 
     </head>
-    <body>
+    <body style="overflow:hidden">
 
-        <div id="viewport">
-
-            <div class="pie"></div>
-            <div class="cake"></div>
+        <div id="viewport" style="background: green; position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;">
+            
+            <div id="slider" style="background: white; position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; margin-left: -25px; margin-top: -25px;"></div>
 
         </div>
 
@@ -54,7 +53,7 @@
 
         <!-- include google analytics here -->
 
-        <!-- concatenate, minify and gzip the above js files -->
+        <!-- grunt/gulp: concatenate, minify and gzip the above js files -->
 
     </body>
 </html>
