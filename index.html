@@ -9,51 +9,19 @@
         <meta name="description" content="">
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
 
-        <!-- generated from style.styl, before compiling make sure the server is running node.js with npm modules jeet and rupture -->
         <link rel="stylesheet" href="css/style.css">
 
-        <!-- html5shim and respond for enquire and picturefill, IE8 support of HTML5 elements and media queries -->
-        <!--[if lte IE 8]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-        <!-- selectivizr for jeet, IE8 support for css pseudo selectors -->
-        <!--[if lte IE 8]>
-            <script src="js/vendor/selectivizr/selectivizr-1.0.2.min.js"></script>
-        <![endif]-->
+        <script src="js/vendor/react/build/react.js"></script>
+        <script src="js/vendor/react/build/JSXTransformer.js"></script>
+        <script src="js/vendor/jquery/jquery-1.11.0.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
 
     </head>
-    <body style="overflow:hidden">
+    <body>
 
-        <div id="viewport" style="background: green; position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;">
-            
-            <div id="slider" style="background: white; position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; margin-left: -25px; margin-top: -25px;"></div>
+        <div id="content"></div>
 
-        </div>
-
-        <!-- jquery -->
-        <script src="js/vendor/jquery/jquery-1.11.0.min.js"></script>
-
-        <!-- velocity to replace jquery's animate() and kick its butt | @todo replace with minified version -->
-        <script src="js/vendor/velocity/velocity.js"></script>
-
-        <!-- enquire to listen for css media queries -->
-        <script src="js/vendor/enquire/enquire-2.1.0.js"></script>
-
-        <!-- fastclick to eliminate 300ms delay on tap event firing -->
-        <script src="js/vendor/fastclick/fastclick-1.0.1.js"></script>
-
-            <!-- hammerjs -->
-            <!-- jquery ui widget for slides + slider? -->
-
-        <!-- init -->
-        <script src="js/breakpoints.js"></script>
-        <script src="js/main.js"></script>
-
-        <!-- include google analytics here -->
-
-        <!-- grunt/gulp: concatenate, minify and gzip the above js files -->
+        <script type="text/jsx" src="js/main.js"></script>
 
     </body>
 </html>

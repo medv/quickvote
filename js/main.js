@@ -1,47 +1,113 @@
+/** @jsx React.DOM */
 ;(function($, window, document, undefined) {
 
 	$(document).ready(function() {
 
-		var viewportEl = $('#viewport'),
-			sliderEl =$('#slider'),
-			placeSlider = function (e) {
-				var pageX = e.originalEvent.x || e.originalEvent.touches[0].pageX,
-					cssX = 0;
+		var converter = new Showdown.converter();
 
-				if (pageX < 50) {
-					cssX = 50;
-				}
-				else if (pageX > (viewportEl.outerWidth() - 50)) {
-					cssX = viewportEl.outerWidth() - 50;
-				}
-				else {
-					cssX = pageX;
-				}
-
-				sliderEl.css({
-					left: cssX
+		var CommentBox = React.createClass({
+			loadCommentsFromServer: function() {
+				$.ajax({
+					url: this.props.url,
+					dataType: 'json',
+					success: function(data) {
+						this.setState({data: data});
+					}.bind(this),
+					error: function(xhr, status, err) {
+						console.error(this.props.url, status, err.toString());
+					}.bind(this)
 				});
-			};
-
-
-		viewportEl.on('touchstart mousedown', function(e){
-			placeSlider(e);
-
-			viewportEl.on('touchmove mousemove', function(e) {
-
-				e.preventDefault();
-				e.stopPropagation();
-
-				placeSlider(e);				
-			});
-
-			viewportEl.on('touchend mouseup', function() {
-				viewportEl.off('touchmove mousemove');
-				viewportEl.off('touchend mouseup');
-			});
-
+			},
+			handleCommentSubmit: function(comment) {
+				$.ajax({
+					url: this.props.url,
+					dataType: 'json',
+					type: 'POST',
+					data: comment,
+					success: function(data) {
+						this.setState({data: data})
+					}.bind(this),
+					error: function(xhr, status, err) {
+						console.error(this.props.url, status, err.toString());
+					}.bind(this)
+				});
+			},
+			getInitialState: function() {
+				return {data: []}
+			},
+			componentWillMount: function() {
+				this.loadCommentsFromServer();
+				setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+			},
+			render: function() {
+				return (
+					<div className="commentBox">
+						<h1>Comments</h1>
+						<CommentList data={this.state.data}/>
+						<CommentForm onCommentSubmit={this.handleCommentSubmit}/>
+					</div>
+				);
+			}
 		});
 
+		var CommentList = React.createClass({
+			render: function() {
+				var commentNodes = this.props.data.map(function(comment, index) {
+					return <Comment key={index} author={comment.author}>{comment.message}</Comment>
+				});
+
+				return (
+					<div className="commentsList">
+						{commentNodes}
+					</div>
+				);
+			}
+		});
+
+		var CommentForm = React.createClass({
+			handleSubmit: function(e) {
+
+				e.preventDefault();
+
+				var author = this.refs.author.getDOMNode().value.trim(),
+					message = this.refs.message.getDOMNode().value.trim();
+
+				this.props.onCommentSubmit({author: author, message: message})
+
+				this.refs.author.getDOMNode().value = '';
+				this.refs.message.getDOMNode().value = '';
+
+				return false;
+			},
+			render: function() {
+				return (
+					<form className="commentForm" onSubmit={this.handleSubmit}>
+						<input ref="author" type="text" placeholder="name" />
+						<input ref="message" type="text" placeholder="message" />
+						<input type="submit" value="Post" />
+					</form>
+				);
+			}
+		});
+
+		var Comment = React.createClass({
+			render: function() {
+				var rawMarkup = converter.makeHtml(this.props.children.toString());
+
+				return (
+					<div className="comment">
+						<h2 className="commentAuthor">{this.props.author}</h2>
+						<span dangerouslySetInnerHTML={{__html: rawMarkup}} />
+					</div>
+				);
+			}
+		});
+
+		React.renderComponent(
+			<CommentBox url="data" pollInterval={2000}/>,
+			document.getElementById('content')
+		);
+		
 	});
 
 })(jQuery, this, document);
