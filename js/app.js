@@ -15,8 +15,21 @@
 			});
 		},
 
+		previousSlide: function() {
+			this.setState({
+				currentSlide: this.state.currentSlide - 1
+			});
+		},
+
+		nextSlide: function() {
+			this.setState({
+				currentSlide: this.state.currentSlide + 1
+			});
+		},
+
 		getInitialState: function() {
 			return {
+				currentSlide: false,
 				style: {
 					width: 0,
 					height: 0
@@ -34,7 +47,7 @@
 		render: function() {
 			return (
 				<div className="App" style={this.state.style}>
-					<Slides style={this.state.style} />
+					<Slides style={this.state.style} currentSlide={this.state.currentSlide} previousSlide={this.previousSlide} nextSlide={this.nextSlide} />
 				</div>
 			);
 		}
@@ -43,22 +56,23 @@
 
 	var Slides = React.createClass({
 
+		// temporary data
+		questions: [
+			'Q1. Cake or Death?',
+			'Q2. Sorry, we\'re fresh out of that, could I interest you in some Death?'
+		],
+
 		render: function() {
 			var me = this;
 
-			// temporary data
-			var questions = [
-				'Q1. Cake or Death?',
-				'Q2. Sorry, we\'re fresh out of that, could I interest you in some Death?'
-			];
-
 			var style = {
-				width: this.props.style.width * questions.length,
+				left: -(this.props.currentSlide * this.props.style.width),
+				width: this.props.style.width * me.questions.length,
 				height: this.props.style.height
 			}
 
-			var questionNodes = questions.map(function(question) {
-				return <Slide question={question} style={me.props.style} />
+			var questionNodes = me.questions.map(function(question, i) {
+				return <Slide key={i} question={question} previousSlide={me.props.previousSlide} nextSlide={me.props.nextSlide} style={me.props.style} />
 			});
 
 			return (
@@ -74,14 +88,19 @@
 
 		render: function() {
 			return (
-				<div className="Slide" style={this.props.style}>{this.props.question}</div>
+				<div className="Slide" style={this.props.style}>
+					{this.props.question}
+					<div className="previous" onClick={this.props.previousSlide} onTouchStart={this.props.previousSlide}>previous</div>
+					<div className="next" onClick={this.props.nextSlide} onTouchStart={this.props.nextSlide}>next</div>
+				</div>
 			);
 		}
+
 	});
 
 	$(document).ready(function() {
 
-		React.initializeTouchEvents();
+		React.initializeTouchEvents(true);
 
 		React.renderComponent(
 			<App />,

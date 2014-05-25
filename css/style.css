@@ -20,8 +20,30 @@ body {
   height: 100%;
   overflow: hidden;
   background: #f00;
+  -webkit-transition: left 0.4s ease-in-out;
 }
 .App .Slides .Slide {
+  position: relative;
   float: left;
   background: #008000;
+}
+.App .Slides .Slide span {
+  display: block;
+}
+.App .Slides .Slide .previous,
+.App .Slides .Slide .next {
+  position: absolute;
+  bottom: 0;
+  line-height: 40px;
+  text-align: center;
+  background: #fff;
+}
+.App .Slides .Slide .previous {
+  left: 0;
+  width: 30%;
+  opacity: 0.5;
+}
+.App .Slides .Slide .next {
+  right: 0;
+  width: 70%;
 }

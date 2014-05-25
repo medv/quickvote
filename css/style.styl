@@ -10,7 +10,26 @@ body
 	.Slides
 		position: absolute; top: 0; left: 0; bottom: 0; height: 100%; overflow: hidden;
 		background: red;
+		-webkit-transition: left 0.4s ease-in-out;
 
 		.Slide
+			position: relative;
 			float: left;
 			background: green;
+
+			span
+				display: block;
+
+			.previous,
+			.next
+				position: absolute; bottom: 0; line-height: 40px; text-align: center;
+				background: #fff;
+
+			.previous
+				left: 0;
+				width: 30%;
+				opacity: 0.5;
+
+			.next
+				right: 0;
+				width: 70%;
