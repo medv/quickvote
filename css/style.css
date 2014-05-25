@@ -1,11 +1,27 @@
 @import 'vendor/normalize.css';
-/* layout */
 body {
   overflow: hidden;
 }
 .App {
   position: absolute;
   top: 0;
+  right: 0;
+  bottom: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+}
+.App .Slides {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #f00;
+}
+.App .Slides .Slide {
+  float: left;
+  background: #008000;
 }

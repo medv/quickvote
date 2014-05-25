@@ -28,17 +28,55 @@
 			var me = this;
 
 			me.setSize();
-			$(window).on('resize', me.setSize());
+			$(window).on('resize', me.setSize);
 		},
 
 		render: function() {
 			return (
 				<div className="App" style={this.state.style}>
-					{this.state.style.width} x {this.state.style.height}
+					<Slides style={this.state.style} />
 				</div>
 			);
 		}
 
+	});
+
+	var Slides = React.createClass({
+
+		render: function() {
+			var me = this;
+
+			// temporary data
+			var questions = [
+				'Q1. Cake or Death?',
+				'Q2. Sorry, we\'re fresh out of that, could I interest you in some Death?'
+			];
+
+			var style = {
+				width: this.props.style.width * questions.length,
+				height: this.props.style.height
+			}
+
+			var questionNodes = questions.map(function(question) {
+				return <Slide question={question} style={me.props.style} />
+			});
+
+			return (
+				<div className="Slides" style={style}>
+					{questionNodes}
+				</div>
+			);
+		}
+
+	});
+
+	var Slide = React.createClass({
+
+		render: function() {
+			return (
+				<div className="Slide" style={this.props.style}>{this.props.question}</div>
+			);
+		}
 	});
 
 	$(document).ready(function() {
