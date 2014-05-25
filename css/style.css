@@ -1,12 +1,11 @@
 @import 'vendor/normalize.css';
-.pie,
-.cake {
-  width: 100px;
-  height: 100px;
+/* layout */
+body {
+  overflow: hidden;
 }
-.pie {
-  background: #f00;
-}
-.cake {
-  background: #008000;
+.App {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
 }
