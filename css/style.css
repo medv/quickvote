@@ -31,10 +31,10 @@ body {
 .App .Slides .Slide {
   position: relative;
   float: left;
-  background: #f3f3f3;
+  background: #008000;
 }
 .App .Slides .Slide:nth-child(even) {
-  background: #dfdfdf;
+  background: #217421;
 }
 .App .Slides span {
   display: block;

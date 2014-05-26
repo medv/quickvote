@@ -16,30 +16,29 @@
 		},
 
 		previousSlide: function(slide) {
-			if (slide.props.key > 0) {
-				this.setState({
-					currentSlide: slide.props.key - 1
-				});
-			}
+			this.setState({
+				currentSlide: slide.props.key - 1
+			});
 		},
 
 		nextSlide: function(slide) {
-			console.log(arguments);
-			if (slide.props.key < (this.state.questions.length - 1)) {
-				this.setState({
-					currentSlide: slide.props.key + 1
-				});
-			}
+			this.setState({
+				currentSlide: slide.props.key + 1
+			});
 		},
 
 		getInitialState: function() {
 			return {
+				pages: [
+					{title: 'Privacy', text: 'This is aaaaaaalll about privacy'},
+					{title: 'About', text: 'Some about text'}
+				],
 				questions: [
 					'Q1. Cake or Death?',
 					'Q2. Sorry, we\'re fresh out of that, could I interest you in some Death?',
 					'Q3. Just some other question...'
 				],
-				currentSlide: false,
+				currentSlide: 2,
 				style: {
 					width: 0,
 					height: 0
@@ -57,7 +56,7 @@
 		render: function() {
 			return (
 				<div className="App" style={this.state.style}>
-					<Slides style={this.state.style} questions={this.state.questions} currentSlide={this.state.currentSlide} previousSlide={this.previousSlide} nextSlide={this.nextSlide} />
+					<Slides style={this.state.style} pages={this.state.pages} questions={this.state.questions} currentSlide={this.state.currentSlide} previousSlide={this.previousSlide} nextSlide={this.nextSlide} />
 				</div>
 			);
 		}
@@ -67,21 +66,27 @@
 	var Slides = React.createClass({
 
 		render: function() {
-			var me = this;
+			var me = this,
+				key = 0;
 
 			var style = {
 				left: -(me.props.currentSlide * me.props.style.width),
-				width: me.props.style.width * me.props.questions.length,
+				width: me.props.style.width * (me.props.pages.length + me.props.questions.length),
 				height: me.props.style.height
 			}
 
-			var questionNodes = me.props.questions.map(function(question, i) {
-				return <Slide key={i} question={question} previousSlide={me.props.previousSlide} nextSlide={me.props.nextSlide} style={me.props.style} />
+			var pagesNodes = me.props.pages.map(function(page, i) {
+				return <Slide key={key++} page={page} previousSlide={me.props.previousSlide} nextSlide={me.props.nextSlide} style={me.props.style} />
+			});
+
+			var questionsNodes = me.props.questions.map(function(question, i) {
+				return <Slide key={key++} question={question} previousSlide={me.props.previousSlide} nextSlide={me.props.nextSlide} style={me.props.style} />
 			});
 
 			return (
 				<div className="Slides" style={style}>
-					{questionNodes}
+					{pagesNodes}
+					{questionsNodes}
 				</div>
 			);
 		}
@@ -96,19 +101,19 @@
 
 			if (key > 0) {
 				buttons.push(
-					<div key="previous" className="previous" onClick={this.props.previousSlide.bind(null, this)} onTouchStart={this.props.previousSlide.bind(null, this)}>previous</div>
+					<div key="previous" className="previous" onClick={this.props.previousSlide.bind(null, this)} onTouchEnd={this.props.previousSlide.bind(null, this)}>previous</div>
 				);
 			}
 
-			if (key < (this._owner.props.questions.length - 1)) {
+			if (key < (this._owner.props.pages.length) + (this._owner.props.questions.length) - 1) {
 				buttons.push(
-					<div key="next" className="next" onClick={this.props.nextSlide.bind(null, this)} onTouchStart={this.props.nextSlide.bind(null, this)}>next</div>
+					<div key="next" className="next" onClick={this.props.nextSlide.bind(null, this)} onTouchEnd={this.props.nextSlide.bind(null, this)}>next</div>
 				);
 			}
 
 			return (
 				<div className="Slide" style={this.props.style}>
-					{this.props.question}
+					{this.props.question}{this.props.page}
 					{buttons}
 				</div>
 			);
