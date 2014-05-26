@@ -1,4 +1,11 @@
 @import 'vendor/normalize.css';
+#viewport {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
 body {
   overflow: hidden;
 }
@@ -19,31 +26,33 @@ body {
   bottom: 0;
   height: 100%;
   overflow: hidden;
-  background: #f00;
   -webkit-transition: left 0.4s ease-in-out;
 }
 .App .Slides .Slide {
   position: relative;
   float: left;
-  background: #008000;
+  background: #f3f3f3;
 }
-.App .Slides .Slide span {
+.App .Slides .Slide:nth-child(even) {
+  background: #dfdfdf;
+}
+.App .Slides span {
   display: block;
 }
-.App .Slides .Slide .previous,
-.App .Slides .Slide .next {
+.App .Slides .previous,
+.App .Slides .next {
   position: absolute;
   bottom: 0;
-  line-height: 40px;
+  line-height: 70px;
   text-align: center;
   background: #fff;
 }
-.App .Slides .Slide .previous {
+.App .Slides .previous {
   left: 0;
   width: 30%;
   opacity: 0.5;
 }
-.App .Slides .Slide .next {
+.App .Slides .next {
   right: 0;
   width: 70%;
 }

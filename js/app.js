@@ -15,20 +15,30 @@
 			});
 		},
 
-		previousSlide: function() {
-			this.setState({
-				currentSlide: this.state.currentSlide - 1
-			});
+		previousSlide: function(slide) {
+			if (slide.props.key > 0) {
+				this.setState({
+					currentSlide: slide.props.key - 1
+				});
+			}
 		},
 
-		nextSlide: function() {
-			this.setState({
-				currentSlide: this.state.currentSlide + 1
-			});
+		nextSlide: function(slide) {
+			console.log(arguments);
+			if (slide.props.key < (this.state.questions.length - 1)) {
+				this.setState({
+					currentSlide: slide.props.key + 1
+				});
+			}
 		},
 
 		getInitialState: function() {
 			return {
+				questions: [
+					'Q1. Cake or Death?',
+					'Q2. Sorry, we\'re fresh out of that, could I interest you in some Death?',
+					'Q3. Just some other question...'
+				],
 				currentSlide: false,
 				style: {
 					width: 0,
@@ -47,7 +57,7 @@
 		render: function() {
 			return (
 				<div className="App" style={this.state.style}>
-					<Slides style={this.state.style} currentSlide={this.state.currentSlide} previousSlide={this.previousSlide} nextSlide={this.nextSlide} />
+					<Slides style={this.state.style} questions={this.state.questions} currentSlide={this.state.currentSlide} previousSlide={this.previousSlide} nextSlide={this.nextSlide} />
 				</div>
 			);
 		}
@@ -56,22 +66,16 @@
 
 	var Slides = React.createClass({
 
-		// temporary data
-		questions: [
-			'Q1. Cake or Death?',
-			'Q2. Sorry, we\'re fresh out of that, could I interest you in some Death?'
-		],
-
 		render: function() {
 			var me = this;
 
 			var style = {
-				left: -(this.props.currentSlide * this.props.style.width),
-				width: this.props.style.width * me.questions.length,
-				height: this.props.style.height
+				left: -(me.props.currentSlide * me.props.style.width),
+				width: me.props.style.width * me.props.questions.length,
+				height: me.props.style.height
 			}
 
-			var questionNodes = me.questions.map(function(question, i) {
+			var questionNodes = me.props.questions.map(function(question, i) {
 				return <Slide key={i} question={question} previousSlide={me.props.previousSlide} nextSlide={me.props.nextSlide} style={me.props.style} />
 			});
 
@@ -87,14 +91,30 @@
 	var Slide = React.createClass({
 
 		render: function() {
+			var key = this.props.key,
+				buttons = [];
+
+			if (key > 0) {
+				buttons.push(
+					<div key="previous" className="previous" onClick={this.props.previousSlide.bind(null, this)} onTouchStart={this.props.previousSlide.bind(null, this)}>previous</div>
+				);
+			}
+
+			if (key < (this._owner.props.questions.length - 1)) {
+				buttons.push(
+					<div key="next" className="next" onClick={this.props.nextSlide.bind(null, this)} onTouchStart={this.props.nextSlide.bind(null, this)}>next</div>
+				);
+			}
+
 			return (
 				<div className="Slide" style={this.props.style}>
 					{this.props.question}
-					<div className="previous" onClick={this.props.previousSlide} onTouchStart={this.props.previousSlide}>previous</div>
-					<div className="next" onClick={this.props.nextSlide} onTouchStart={this.props.nextSlide}>next</div>
+					{buttons}
 				</div>
 			);
-		}
+		},
+
+
 
 	});
 
