@@ -114,12 +114,69 @@
 			return (
 				<div className="Slide" style={this.props.style}>
 					{this.props.question}{this.props.page}
+					<Draglet />
 					{buttons}
+				</div>
+			);
+		}
+	});
+
+	var Draglet = React.createClass({
+
+		getInitialState: function() {
+			return {
+				dragging: false,
+				rel: {
+					x: 0
+				},
+				pos: {
+					x: 0
+				}
+			}
+		},
+
+		render: function() {
+			var dragHandler = this.state.dragging ? this.dragHandler : null;
+
+			return (
+				<div className="Draglet">
+					<div className="handle" style={{left: this.state.pos.x}} onMouseDown={this.dragStart} onMouseUp={this.dragEnd} onMouseMove={dragHandler}></div>
 				</div>
 			);
 		},
 
+		dragStart: function(e) {
+			if (e.button !== 0) return; // only left mouse button
+			var pos = $(this.getDOMNode()).offset();
+			this.setState({
+				dragging: true,
+				rel: {
+					x: e.pageX - pos.left
+				}
+			});
+			e.stopPropagation();
+			e.preventDefault();
+		},
 
+		dragEnd: function(e) {			
+			this.setState({dragging: false});
+			e.stopPropagation();
+			e.preventDefault();
+		},
+
+		dragHandler: function(e) {
+			//console.log($.extend(true, {}, e));
+
+			if (!this.state.dragging) return;
+
+			this.setState({
+				pos: {
+					x: e.pageX - this.state.rel.x
+				}
+			});
+			e.stopPropagation();
+			e.preventDefault();
+		},
 
 	});
 

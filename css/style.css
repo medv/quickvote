@@ -36,8 +36,24 @@ body {
 .App .Slides .Slide:nth-child(even) {
   background: #217421;
 }
-.App .Slides span {
-  display: block;
+.App .Slides .Draglet {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 90px;
+  background: rgba(255,255,255,0.3);
+  height: 100px;
+}
+.App .Slides .Draglet .handle {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  background: #fff;
+  border: 10px solid #000;
+  width: 70px;
+  height: 70px;
+  margin: -45px 0 0 -45px;
+  border-radius: 100px;
 }
 .App .Slides .previous,
 .App .Slides .next {
