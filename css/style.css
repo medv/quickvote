@@ -55,6 +55,24 @@ body {
   margin: -45px 0 0 -45px;
   border-radius: 100px;
 }
+.App .Slides .AnswerInput {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 200px;
+  width: 300px;
+  margin: 0 auto;
+  font-size: 30px;
+  text-align: center;
+}
+.App .Slides .AnswerInput input {
+  width: 100px;
+  text-align: center;
+}
+.App .Slides .AnswerInput a {
+  margin: -5px 15px;
+  padding: 10px;
+}
 .App .Slides .previous,
 .App .Slides .next {
   position: absolute;
