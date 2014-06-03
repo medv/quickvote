@@ -28,27 +28,33 @@
 		},
 
 		onSubtract: function(slide) {
-			var newState = $.extend({}, this.state);
+			var newState = $.extend({}, this.state),
+				questionKey = slide.props.key,
+				answer = newState.questions[questionKey].answer - 1;
 
-			newState.questions[slide.props.key].answer = newState.questions[slide.props.key].answer - 1;
-
-			this.setState(newState);
+			newState.questions[slide.props.key].answer = answer;
+			this.setState(newState, this.onAnswer(questionKey, answer));
 		},
 
 		onAdd: function(slide) {
-			var newState = $.extend({}, this.state);
+			var newState = $.extend({}, this.state),
+				questionKey = slide.props.key,
+				answer = newState.questions[questionKey].answer + 1;
 
-			newState.questions[slide.props.key].answer = newState.questions[slide.props.key].answer + 1;
+			newState.questions[slide.props.key].answer = answer;
+			this.setState(newState, this.onAnswer(questionKey, answer));					
+		},
 
-			this.setState(newState);						
+		onAnswer: function(question, answer) {
+			console.log('http://localhost:8080/answer/' + question + '/' + answer)
 		},
 
 		getInitialState: function() {
 			return {
 				questions: [
-					{question: 'Q1. Cake or Death?', answer: 0},
-					{question: 'Q2. Sorry, we\'re fresh out of that, could I interest you in some Death?', answer: 0},
-					{question: 'Q3. Just some other question...', answer: 0}				
+					{question: 'Cake or Death?', answer: 0},
+					{question: 'Sorry, we\'re fresh out of that, could I interest you in some Death?', answer: 0},
+					{question: 'Just some other question...', answer: 0}				
 				],
 				currentSlide: 0,
 				style: {
@@ -120,7 +126,7 @@
 
 	var Slide = React.createClass({
 
-		render: function() {
+		getButtons: function() {
 			var me = this,
 				key = me.props.key,
 				buttons = [];
@@ -137,14 +143,25 @@
 				);
 			}
 
+			return buttons;
+		},
+
+		render: function() {
+			var me = this,
+				buttons;
+
+			buttons = me.getButtons();
+
 			return (
 				<div className="Slide" style={me.props.style}>
-					{me.props.question.question} - {me.props.question.answer}
+					<p>Q{me.props.key + 1}. {me.props.question.question}</p>
+					<p>Your answer: {me.props.question.answer}</p>
 					<AnswerInput question={me.props.question} onAdd={me.props.onAdd.bind(null, me)} onSubtract={me.props.onSubtract.bind(null, me)} />
 					{buttons}
 				</div>
 			);
 		}
+
 	});
 
 	var AnswerInput = React.createClass({
@@ -171,92 +188,3 @@
 	});
 
 })(jQuery, this, document);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
-	var Draglet = React.createClass({
-
-		getInitialState: function() {
-			return {
-				dragging: false,
-				rel: {
-					x: 0
-				},
-				pos: {
-					x: 0
-				}
-			}
-		},
-
-		render: function() {
-			var dragHandler = this.state.dragging ? this.dragHandler : null;
-
-			return (
-				<div className="Draglet">
-					<div
-						className="handle"
-						style={{left: this.state.pos.x}}
-						onMouseDown={this.dragStart}
-						onMouseUp={this.dragEnd}
-						onMouseMove={dragHandler}>
-					</div>
-				</div>
-			);
-		},
-
-		dragStart: function(e) {
-			//if (e.button !== 0) return; // only left mouse button
-			var pos = $(this.getDOMNode()).offset();
-			this.setState({
-				dragging: true,
-				rel: {
-					x: e.pageX - pos.left // @todo calculate based on Draglet instead of Page
-				}
-			});
-
-			e.stopPropagation();
-			e.preventDefault();
-		},
-
-		dragEnd: function(e) {			
-			this.setState({dragging: false});
-
-			e.stopPropagation();
-			e.preventDefault();
-		},
-
-		dragHandler: function(e) {
-			//console.log($.extend({}, e));
-
-			if (!this.state.dragging) return;
-
-			this.setState({
-				pos: {
-					x: e.pageX - this.state.rel.x
-				}
-			});
-
-			e.stopPropagation();
-			e.preventDefault();
-		},
-
-	});
-	*/
