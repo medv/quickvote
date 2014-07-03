@@ -1,8 +1,83 @@
 /** @jsx React.DOM */
 ;(function($, window, document, undefined) {
 
+	/**
+	 *
+	 */
 	var App = React.createClass({
 
+		// LIFETIME HOOKS
+		getInitialState: function() {
+			return {
+				slides: [
+					{type: 'content', title: 'About', content: 'Some About content'},
+					{type: 'content', title: 'Privacy', content: 'Some Privacy content'},
+
+					{type: 'question', title: 'Nuclear power?', answer: 0},			
+					{type: 'question', title: 'Auckland roads?', answer: 0},
+					{type: 'question', title: 'Offshore drilling?', answer: 0},
+
+					{type: 'results', title: 'Results', content: 'Lets see now...'}
+				],
+				currentSlide: 0,
+
+				style: {
+					width: 0,
+					height: 0
+				}
+			}
+		},
+
+		componentWillMount: function() {
+			var me = this;
+
+			me.setSize();
+			$(window).on('resize', me.setSize);
+		},
+
+		render: function() {
+			var me = this;
+			
+			return (
+				<div className="App" style={me.state.style}>
+					<Slides
+						slides={me.state.slides}
+						currentSlide={me.state.currentSlide}
+						style={me.state.style}
+
+						previousSlide={me.previousSlide}
+						nextSlide={me.nextSlide}
+						onAdd={me.onAdd}
+						onSubtract={me.onSubtract}>
+					</Slides>
+				</div>
+			);
+		},
+
+		// EVENTS
+		onSubtract: function(slide) {
+			var newState = $.extend({}, this.state),
+				questionKey = slide.props.key,
+				answer = newState.questions[questionKey].answer - 1;
+
+			newState.questions[questionKey].answer = answer;
+			this.setState(newState, this.onAnswer(questionKey, answer));
+		},
+
+		onAdd: function(slide) {
+			var newState = $.extend({}, this.state),
+				questionKey = slide.props.key,
+				answer = newState.questions[questionKey].answer + 1;
+
+			newState.questions[questionKey].answer = answer;
+			this.setState(newState, this.onAnswer(questionKey, answer));					
+		},
+
+		onAnswer: function(question, answer) {
+			console.log('http://localhost:8080/answer/' + question + '/' + answer)
+		},
+
+		// METHODS
 		setSize: function() {
 			var me = this,
 				$window = $(window);
@@ -27,81 +102,36 @@
 			});
 		},
 
-		onSubtract: function(slide) {
-			var newState = $.extend({}, this.state),
-				questionKey = slide.props.key,
-				answer = newState.questions[questionKey].answer - 1;
-
-			newState.questions[slide.props.key].answer = answer;
-			this.setState(newState, this.onAnswer(questionKey, answer));
-		},
-
-		onAdd: function(slide) {
-			var newState = $.extend({}, this.state),
-				questionKey = slide.props.key,
-				answer = newState.questions[questionKey].answer + 1;
-
-			newState.questions[slide.props.key].answer = answer;
-			this.setState(newState, this.onAnswer(questionKey, answer));					
-		},
-
-		onAnswer: function(question, answer) {
-			console.log('http://localhost:8080/answer/' + question + '/' + answer)
-		},
-
-		getInitialState: function() {
-			return {
-				questions: [
-					{question: 'Cake or Death?', answer: 0},
-					{question: 'Sorry, we\'re fresh out of that, could I interest you in some Death?', answer: 0},
-					{question: 'Just some other question...', answer: 0}				
-				],
-				currentSlide: 0,
-				style: {
-					width: 0,
-					height: 0
-				}
-			}
-		},
-
-		componentWillMount: function() {
-			var me = this;
-
-			me.setSize();
-			$(window).on('resize', me.setSize);
-		},
-
-		render: function() {
-			return (
-				<div className="App" style={this.state.style}>
-					<Slides
-						style={this.state.style}
-						questions={this.state.questions}
-						currentSlide={this.state.currentSlide}
-						previousSlide={this.previousSlide}
-						nextSlide={this.nextSlide}
-						onAdd={this.onAdd}
-						onSubtract={this.onSubtract}>
-					</Slides>
-				</div>
-			);
-		}
-
 	});
 
+
+
+
+
+
+
+
+
+
+	/**
+	 *
+	 */
 	var Slides = React.createClass({
 
 		render: function() {
 			var me = this,
-				key = 0;
+				key = 0,
+				style,
+				questionNodes,
+				resultNode;
 
-			var style = {
+			style = {
 				left: -(me.props.currentSlide * me.props.style.width),
 				width: me.props.style.width * me.props.questions.length,
 				height: me.props.style.height
 			}
 
-			var questionsNodes = me.props.questions.map(function(question, i) {
+			questionsNodes = me.props.questions.map(function(question, i) {
 				return (
 					<Slide
 						key={key++}
@@ -115,6 +145,14 @@
 				);
 			});
 
+			resultNode = (
+				<Slide
+					key={key}
+					previousSlide={me.props.previousSlide}
+					style={me.props.style}>
+				</Slide>
+			);
+
 			return (
 				<div className="Slides" style={style}>
 					{questionsNodes}
@@ -124,6 +162,18 @@
 
 	});
 
+
+
+
+
+
+
+
+
+
+	/**
+	 *
+	 */
 	var Slide = React.createClass({
 
 		getButtons: function() {
@@ -164,6 +214,18 @@
 
 	});
 
+
+
+
+
+
+
+
+
+
+	/**
+	 *
+	 */
 	var AnswerInput = React.createClass({
 		render: function() {
 			return (
@@ -176,6 +238,18 @@
 		}
 	});
 
+
+
+
+
+
+
+
+
+
+	/**
+	 *
+	 */
 	$(document).ready(function() {
 
 		React.initializeTouchEvents(true);
