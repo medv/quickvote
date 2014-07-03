@@ -21,6 +21,8 @@ body
 		.Slide
 			position: relative;	float: left;
 			background: #008000;
+			box-sizing: border-box;
+			padding: 25px;
 
 		.Slide:nth-child(even)
 				background: #217421;
@@ -44,6 +46,18 @@ body
 					width: 100px; text-align: center;
 				a
 					margin: -5px 15px; padding: 10px;
+
+			ul
+				list-style: none;
+				border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);
+				padding: 10px 0;
+
+				li
+					width: 100%; overflow: hidden;
+
+					.results-answer
+						float: right;
+						font-weight: bold;
 
 			.previous,
 			.next

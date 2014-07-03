@@ -32,6 +32,8 @@ body {
   position: relative;
   float: left;
   background: #008000;
+  box-sizing: border-box;
+  padding: 25px;
 }
 .App .Slides .Slide:nth-child(even) {
   background: #217421;
@@ -72,6 +74,20 @@ body {
 .App .Slides .AnswerInput a {
   margin: -5px 15px;
   padding: 10px;
+}
+.App .Slides ul {
+  list-style: none;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 10px 0;
+}
+.App .Slides ul li {
+  width: 100%;
+  overflow: hidden;
+}
+.App .Slides ul li .results-answer {
+  float: right;
+  font-weight: bold;
 }
 .App .Slides .previous,
 .App .Slides .next {
